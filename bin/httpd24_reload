@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CONTAINER_NAME="llaumgui_centos7-scl-httpd24"
+
+SCL_NAME="httpd24"
+
+docker exec -it ${CONTAINER_NAME} scl enable ${SCL_NAME} "exec httpd -k graceful"

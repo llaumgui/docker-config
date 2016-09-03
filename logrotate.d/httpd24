@@ -1,0 +1,14 @@
+/var/www/*/*/logs/*.log,
+/var/log/httpd24/*_log {
+    daily
+    dateext
+    missingok
+    rotate 90
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        /usr/local/bin/httpd24_reload > /dev/null;
+    endscript
+}
