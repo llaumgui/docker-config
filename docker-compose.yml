@@ -12,13 +12,13 @@ services:
     mem_limit: 512m
     volumes:
      - /etc/localtime:/etc/localtime:ro
-     - ~/public_html:/var/www/html
+     - ~/public_html:/var/www
      - ./volumes/conf/httpd24/vhost.d:/etc/httpd/vhost.d:ro
      - ./volumes/log/httpd24:/var/log/httpd24
     ports:
      - 80:80
     links:
-     - llaumgui_centos7-scl-php56:php56
+     - llaumgui_centos7-scl-php56:php
 
   ### Start php-fpm service from container.
   llaumgui_centos7-scl-php56:
@@ -30,33 +30,14 @@ services:
     mem_limit: 1g
     volumes:
      - /etc/localtime:/etc/localtime:ro
-     - ~/public_html:/var/www/html
+     - ~/public_html:/var/www
      - ./volumes/conf/php56/90-custom.ini:/etc/php.d/90-custom.ini:ro
      - ./volumes/log/php56:/var/log/php-fpm
     expose:
      - 9000
     links:
-     - mariadb10:container_database
-     - memcached:container_memcached
-     - llaumgui_centos7-sphinxse:container_sphinx
-
-  ### Start SphinxSE service from container.
-  llaumgui_centos7-sphinxse:
-    container_name: llaumgui_centos7-sphinxse
-    image: llaumgui/centos7-sphinxse
-    build: 
-      context: ../docker-images/sphinxse/2/
-    restart: always
-    mem_limit: 1g
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./volumes/data/sphinxse:/var/lib/sphinx
-      - ./volumes/conf/sphinxse:/etc/sphinx:ro
-      - ./volumes/log/sphinxse:/var/log/sphinx
-    expose:
-     - 9312
-    links:
-     - mariadb10:container_database
+     - mariadb10:database
+     - memcached:memcached
 
   ### Start mariadb service from container.
   mariadb10:
