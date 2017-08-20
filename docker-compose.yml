@@ -1,15 +1,14 @@
-version: '2'
+version: '3.1'
 
 services:
 
   ### Start httpd service from container and share ~/public_http.
-  llaumgui_centos7-scl-httpd24:
-    container_name: llaumgui_centos7-scl-httpd24
+  httpd24:
+    container_name: httpd24
     image: llaumgui/centos7-scl-httpd24
     build: 
       context: ../docker-images/httpd/2.4/
     restart: always
-    mem_limit: 512m
     volumes:
      - /etc/localtime:/etc/localtime:ro
      - ~/public_html:/var/www
@@ -18,21 +17,31 @@ services:
     ports:
      - 80:80
     links:
-     - llaumgui_centos7-scl-php56:php
+     - php71:php
 
   ### Start php-fpm service from container.
-  llaumgui_centos7-scl-php56:
-    container_name: llaumgui_centos7-scl-php56
-    image: llaumgui/centos7-scl-php56
+  php71:
+    container_name: php71
+    image: llaumgui/php:7.1-fpm
     build: 
-      context: ../docker-images/php-fpm/5.6/
+      context: ../docker-images/php-fpm/7.1/
+      args:
+        DOCKER_PHP_ENABLE_APCU: 'on'
+        DOCKER_PHP_ENABLE_COMPOSER: 'on'
+        DOCKER_PHP_ENABLE_LDAP: 'on'
+        DOCKER_PHP_ENABLE_MEMCACHED: 'on'
+        DOCKER_PHP_ENABLE_MONGODB: 'on'
+        DOCKER_PHP_ENABLE_MYSQL: 'on'
+        DOCKER_PHP_ENABLE_POSTGRESQL: 'on'
+        DOCKER_PHP_ENABLE_REDIS: 'on'
+        DOCKER_PHP_ENABLE_SYMFONY: 'on'
+        DOCKER_PHP_ENABLE_XDEBUG: 'on'
     restart: always
-    mem_limit: 1g
     volumes:
      - /etc/localtime:/etc/localtime:ro
      - ~/public_html:/var/www
-     - ./volumes/conf/php56/90-custom.ini:/etc/php.d/90-custom.ini:ro
-     - ./volumes/log/php56:/var/log/php-fpm
+     - ./volumes/conf/php71/90-custom.ini:/usr/local/etc/php/conf.d/90-custom.ini:ro
+     - ./volumes/log/php71:/var/log/php-fpm
     expose:
      - 9000
     links:
@@ -44,7 +53,6 @@ services:
     container_name: mariadb10
     image: mariadb:10
     restart: always
-    mem_limit: 1g
     env_file:
       - .env
     volumes:
@@ -57,7 +65,6 @@ services:
   memcached:
     container_name: memcached
     image: memcached
-    mem_limit: 256m
     volumes:
      - /etc/localtime:/etc/localtime:ro
     expose:
