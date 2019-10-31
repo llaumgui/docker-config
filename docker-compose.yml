@@ -20,9 +20,9 @@ services:
   #################################### php-fpm service with shared ~/public_http
   php:
     container_name: php
-    image: llaumgui/php:7.2-fpm
-    build: 
-      context: ../docker-images/php-fpm/7.2/
+    image: llaumgui/php:7.3-fpm
+    build:
+      context: ../docker-images/php-fpm/7.3/
       args:
         DOCKER_PHP_ENABLE_APCU: 'on'
         DOCKER_PHP_ENABLE_COMPOSER: 'on'
@@ -31,7 +31,7 @@ services:
         DOCKER_PHP_ENABLE_MONGODB: 'off'
         DOCKER_PHP_ENABLE_MYSQL: 'on'
         DOCKER_PHP_ENABLE_POSTGRESQL: 'off'
-        DOCKER_PHP_ENABLE_REDIS: 'off'
+        DOCKER_PHP_ENABLE_REDIS: 'on'
         DOCKER_PHP_ENABLE_SYMFONY: 'on'
         DOCKER_PHP_ENABLE_XDEBUG: 'on'
         DOCKER_USER_UID: 1000
@@ -40,7 +40,7 @@ services:
     volumes:
      - /etc/localtime:/etc/localtime:ro
      - ~/public_html:/var/www
-     - ./volumes/log/php72:/var/log/php-fpm
+     - ./volumes/log/php73:/var/log/php-fpm
     expose:
      - 9000
     depends_on:
@@ -49,7 +49,7 @@ services:
     links:
      - mariadb:database
 
-  ### Start mariadb service from container.
+  ##################################################################### Database
   mariadb:
     container_name: mariadb
     image: mariadb:10
