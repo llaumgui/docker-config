@@ -26,6 +26,8 @@ services:
       args:
         DOCKER_PHP_ENABLE_APCU: 'on'
         DOCKER_PHP_ENABLE_COMPOSER: 'on'
+        DOCKER_PHP_ENABLE_EXIF: 'on'
+        DOCKER_PHP_ENABLE_IMAGICK: 'on'
         DOCKER_PHP_ENABLE_LDAP: 'off'
         DOCKER_PHP_ENABLE_MEMCACHED: 'on'
         DOCKER_PHP_ENABLE_MONGODB: 'off'
